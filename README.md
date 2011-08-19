@@ -9,9 +9,11 @@ Unix with Android testing evironment. TeamCity and ruby 1.8 + .
 In root TCATR directory run 'rake install'.  
   
 ###**Output**  
+You should see the following output.  
 cp -f teamCityAnt /usr/local/bin/teamCityAnt  
 chmod +x /usr/local/bin/teamCityAnt  
+  
 May require root permissions.  
   
 ###**Example use**  
-ant clean coverage | teamCityAnt
+ant clean coverage | teamCityAnt  
