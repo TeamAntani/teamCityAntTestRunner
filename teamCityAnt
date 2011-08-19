@@ -1,0 +1,29 @@
+#!/usr/bin/ruby
+failures = 0
+passes = 0
+results = false
+while stdin = gets
+	puts "#{stdin}"
+	if stdin.include?("Test results")
+		results = true
+	end
+	if results = false
+		if stdin.include?("Failure in")
+			failures += 1
+			puts "##teamcity[buildStatus status='FAILURE' text='Tests Failed: #{failures}, passed: #{passes}, Android tests: #{failures + passes}']"
+		end
+		if stdin.include?("[exec]") and stdin.include?(":.") 
+			colons = stdin.split(":")
+			periods = colons[1].count(".")
+			passes += periods
+			puts "##teamcity[buildStatus status='NORMAL' text='Tests Failed: #{failures}, passed: #{passes}, Android tests: #{failures + passes}']"
+		end
+		if stdin.include?("[exec] .")
+			unless stdin.include?("F")
+				periods = stdin.count(".")
+				passes += periods
+				puts "##teamcity[buildStatus status='NORMAL' text='Tests Failed: #{failures}, passed: #{passes}, Android tests: #{failures + passes}']"
+			end
+		end
+	end
+end
