@@ -7,7 +7,7 @@ while stdin = gets
 	if stdin.include?("Test results")
 		results = true
 	end
-	if results = false
+	if results == false
 		if stdin.include?("Failure in")
 			failures += 1
 			puts "##teamcity[buildStatus status='FAILURE' text='Tests Failed: #{failures}, passed: #{passes}, Android tests: #{failures + passes}']"
