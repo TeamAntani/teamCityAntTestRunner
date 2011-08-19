@@ -13,17 +13,20 @@ while stdin = gets
 			failures += 1
 			status = "FAILURE"
 			puts "##teamcity[buildStatus status='#{status}' text='Tests Failed: #{failures}, passed: #{passes}, Android tests: #{failures + passes}']"
+			STDOUT.flush
 		end
 		if stdin.include?("[exec]") and stdin.include?(":.") 
 			colons = stdin.split(":")
 			periods = colons[1].count(".")
 			passes += periods
 			puts "##teamcity[buildStatus status='#{status}' text='Tests Failed: #{failures}, passed: #{passes}, Android tests: #{failures + passes}']"
+			STDOUT.flush
 		end
 		if stdin.include?("[exec] .")
 			periods = stdin.count(".")
 			passes += periods
 			puts "##teamcity[buildStatus status='#{status}' text='Tests Failed: #{failures}, passed: #{passes}, Android tests: #{failures + passes}']"
+			STDOUT.flush
 		end
 	end
 end
