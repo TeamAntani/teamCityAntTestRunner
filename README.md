@@ -18,4 +18,4 @@ May require root permissions.
 ###**Example use**  
 ant clean coverage | teamCityAnt  
   
-[Example](https://github.com/curiousminds/teamCityAntTestRunner/raw/master/teamcity_example.png "Example")
+![Example](https://github.com/curiousminds/teamCityAntTestRunner/raw/master/teamcity_example.png "Example")
