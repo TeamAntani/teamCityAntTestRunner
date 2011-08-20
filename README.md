@@ -1,7 +1,10 @@
 #**Team City Ant Test Runner**  
   
 Allows for integration between TeamCity and ant Robotium instrumentation tests for Android platform. Commands such as run-tests or clean coverage display proper testing results while build is running. 
-
+  
+###**Test Output**  
+![Results](https://github.com/curiousminds/teamCityAntTestRunner/raw/master/test_results.png "Results")  
+  
 ###**Requirements**  
 Unix with Android testing evironment. TeamCity and ruby 1.8 + .  
   
@@ -18,6 +21,4 @@ May require root permissions.
 ###**Example use**  
 ant clean coverage | teamCityAnt  
   
-![Example](https://github.com/curiousminds/teamCityAntTestRunner/raw/master/teamcity_example.png "Example")  
-  
-![Results](https://github.com/curiousminds/teamCityAntTestRunner/raw/master/test_results.png "Results")
+![Example](https://github.com/curiousminds/teamCityAntTestRunner/raw/master/teamcity_example.png "Example")
