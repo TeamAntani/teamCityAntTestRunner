@@ -20,5 +20,7 @@ May require root permissions.
   
 ###**Example use**  
 ant clean coverage | teamCityAnt  
-  
+ant run-tests | teamCityAnt  
+or both  
+ant run-tests coverage | teamCityAnt
 ![Example](https://github.com/curiousminds/teamCityAntTestRunner/raw/master/teamcity_example.png "Example")
