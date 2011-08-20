@@ -2,7 +2,6 @@
 failures = 0
 passes = 0
 results = false
-status = "NORMAL"
 while stdin = gets
 	puts "#{stdin}"
 	if stdin.include?("Test results")
@@ -12,20 +11,20 @@ while stdin = gets
 		if stdin.include?("Failure in")
 			failures += 1
 			status = "FAILURE"
-			puts "##teamcity[buildStatus status='#{status}' text='Tests Failed: #{failures}, passed: #{passes}, Android tests: #{failures + passes}']"
+			puts "##teamcity[buildStatus status='FAILURE' text='Tests Failed: #{failures}, passed: #{passes}, Android tests: #{failures + passes}']"
 			STDOUT.flush
 		end
 		if stdin.include?("[exec]") and stdin.include?(":.") 
 			colons = stdin.split(":")
 			periods = colons[1].count(".")
 			passes += periods
-			puts "##teamcity[buildStatus status='#{status}' text='Tests Failed: #{failures}, passed: #{passes}, Android tests: #{failures + passes}']"
+			puts "##teamcity[buildStatus text='Tests Failed: #{failures}, passed: #{passes}, Android tests: #{failures + passes}']"
 			STDOUT.flush
 		end
 		if stdin.include?("[exec] .")
 			periods = stdin.count(".")
 			passes += periods
-			puts "##teamcity[buildStatus status='#{status}' text='Tests Failed: #{failures}, passed: #{passes}, Android tests: #{failures + passes}']"
+			puts "##teamcity[buildStatus text='Tests Failed: #{failures}, passed: #{passes}, Android tests: #{failures + passes}']"
 			STDOUT.flush
 		end
 	end
