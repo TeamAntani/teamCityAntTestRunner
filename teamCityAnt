@@ -8,9 +8,12 @@ while stdin = gets
 		results = true
 	end
 	if results == false
+		if stdin.include?("[javac]") and stdin.include?("error")
+			puts "##teamcity[buildStatus status='FAILURE' text='Build Failed']"
+			break
+		end
 		if stdin.include?("Failure in")
 			failures += 1
-			status = "FAILURE"
 			puts "##teamcity[buildStatus status='FAILURE' text='Tests Failed: #{failures}, passed: #{passes}, Android tests: #{failures + passes}']"
 			STDOUT.flush
 		end
