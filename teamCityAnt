@@ -3,29 +3,33 @@ failures = 0
 passes = 0
 results = false
 while stdin = gets
-	puts "#{stdin}"
-	STDOUT.flush
-	if stdin.include?("Test results")
-		results = true
-	end
-	if results == false
-		if stdin.include?("Failure in")
-			failures += 1
-			puts "##teamcity[buildStatus status='FAILURE' text='Tests Failed: #{failures}, passed: #{passes}, Android tests: #{failures + passes}']"
-			STDOUT.flush
-		end
-		if stdin.include?("[exec]") and stdin.include?(":.") 
-			colons = stdin.split(":")
-			periods = colons[1].count(".")
-			passes += periods
-			puts "##teamcity[buildStatus text='Tests Failed: #{failures}, passed: #{passes}, Android tests: #{failures + passes}']"
-			STDOUT.flush
-		end
-		if stdin.include?("[exec] .")
-			periods = stdin.count(".")
-			passes += periods
-			puts "##teamcity[buildStatus text='Tests Failed: #{failures}, passed: #{passes}, Android tests: #{failures + passes}']"
-			STDOUT.flush
-		end
-	end
+  puts "#{stdin}"
+  STDOUT.flush
+  if stdin.include?("Test results")
+	  results = true
+  end
+  if results == false
+    if stdin.include?("Failure in")
+      test = stdin.gsub("[exec] Failure in ", "").strip
+      failures += 1
+      puts "##teamcity[testStarted name=\'#{test}\']"
+      puts "##teamcity[buildStatus text='Tests Failed: #{failures}, passed: #{passes}, Android tests: #{failures + passes}']"
+      puts "##teamcity[testFailed name=\'#{test1}\' message='failure message' details='message and stack trace']"
+      puts "##teamcity[testFinished name=\'#{test}\']"
+      STDOUT.flush
+    end
+    if stdin.include?("[exec]") and stdin.include?(":.") 
+      colons = stdin.split(":")
+      periods = colons[1].count(".")
+      passes += periods
+      puts "##teamcity[buildStatus text='Tests Failed: #{failures}, passed: #{passes}, Android tests: #{failures + passes}']"
+      STDOUT.flush
+    end
+    if stdin.include?("[exec] .")
+      periods = stdin.count(".")
+      passes += periods
+      puts "##teamcity[buildStatus text='Tests Failed: #{failures}, passed: #{passes}, Android tests: #{failures + passes}']"
+      STDOUT.flush
+    end
+  end
 end
