@@ -14,7 +14,7 @@ while stdin = gets
       failures += 1
       puts "##teamcity[testStarted name=\'#{test}\']"
       puts "##teamcity[buildStatus text='Tests Failed: #{failures}, passed: #{passes}, Android tests: #{failures + passes}']"
-      puts "##teamcity[testFailed name=\'#{test1}\' message='failure message' details='message and stack trace']"
+      puts "##teamcity[testFailed name=\'#{test}\' message='failure message' details='message and stack trace']"
       puts "##teamcity[testFinished name=\'#{test}\']"
       STDOUT.flush
     end
