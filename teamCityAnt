@@ -17,21 +17,27 @@ while stdin = gets
       puts "##teamcity[testFailed name=\'#{test}\']"
       puts "##teamcity[testFinished name=\'#{test}\']"
       STDOUT.flush
-    elsif stdin.include?("[exec]") and stdin.include?(":.")
+    end
+    if stdin.include?("[exec]") and stdin.include?(":.")
       colons = stdin.split(":")
       periods = colons[1].count(".")
       passes += periods
       puts "##teamcity[buildStatus text='Tests Failed: #{failures}, passed: #{passes}, Android tests: #{failures + passes}']"
       STDOUT.flush
-    elsif stdin.include?("[exec] .")
+    end
+    if stdin.include?("[exec] .")
       periods = stdin.count(".")
       passes += periods
       puts "##teamcity[buildStatus text='Tests Failed: #{failures}, passed: #{passes}, Android tests: #{failures + passes}']"
       STDOUT.flush
-    elsif stdin.include?("BUILD FAILED")
+    end
+    if stdin.include?("BUILD FAILED")
       puts "##teamcity[buildStatus status='FAILURE']"
-    elsif stdin.include?("[exec] error: device not found")
+      STDOUT.flush
+    end
+    if stdin.include?("[exec] error: device not found")
       puts "##teamcity[buildStatus status='FAILURE' text='Emulator Error']"
+      STDOUT.flush
     end
   end
 end
