@@ -6,7 +6,7 @@ while stdin = gets
   puts "#{stdin}"
   STDOUT.flush
   if stdin.include?("Test results")
-	  results = true
+          results = true
   end
   if results == false
     if stdin.include?("Failure in")
@@ -14,22 +14,24 @@ while stdin = gets
       failures += 1
       puts "##teamcity[testStarted name=\'#{test}\']"
       puts "##teamcity[buildStatus text='Tests Failed: #{failures}, passed: #{passes}, Android tests: #{failures + passes}']"
-      puts "##teamcity[testFailed name=\'#{test}\' message='failure message' details='message and stack trace']"
+      puts "##teamcity[testFailed name=\'#{test}\']"
       puts "##teamcity[testFinished name=\'#{test}\']"
       STDOUT.flush
-    end
-    if stdin.include?("[exec]") and stdin.include?(":.") 
+    elsif stdin.include?("[exec]") and stdin.include?(":.")
       colons = stdin.split(":")
       periods = colons[1].count(".")
       passes += periods
       puts "##teamcity[buildStatus text='Tests Failed: #{failures}, passed: #{passes}, Android tests: #{failures + passes}']"
       STDOUT.flush
-    end
-    if stdin.include?("[exec] .")
+    elsif stdin.include?("[exec] .")
       periods = stdin.count(".")
       passes += periods
       puts "##teamcity[buildStatus text='Tests Failed: #{failures}, passed: #{passes}, Android tests: #{failures + passes}']"
       STDOUT.flush
+    elsif stdin.include?("BUILD FAILED")
+      puts "##teamcity[buildStatus status='FAILURE']"
+    elsif stdin.include?("[exec] error: device not found")
+      puts "##teamcity[buildStatus status='FAILURE' text='Emulator Error']"
     end
   end
 end
