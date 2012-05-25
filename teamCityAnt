@@ -1,7 +1,18 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 failures = 0
 passes = 0
 results = false
+def only_dots?(string_in)
+  string_in.each_char do |c|
+    if c == "." or c == " "
+      #dots = true
+    else
+      return false
+    end
+  end
+  return true
+end
+
 while stdin = gets
   puts "#{stdin}"
   STDOUT.flush
@@ -18,14 +29,14 @@ while stdin = gets
       puts "##teamcity[testFinished name=\'#{test}\']"
       STDOUT.flush
     end
-    if stdin.include?("[exec]") and stdin.include?(":.")
+    if stdin.include?(":.")
       colons = stdin.split(":")
       periods = colons[1].count(".")
       passes += periods
       puts "##teamcity[buildStatus text='Tests Failed: #{failures}, passed: #{passes}, Android tests: #{failures + passes}']"
       STDOUT.flush
     end
-    if stdin.include?("[exec] .")
+    if only_dots?(stdin)
       periods = stdin.count(".")
       passes += periods
       puts "##teamcity[buildStatus text='Tests Failed: #{failures}, passed: #{passes}, Android tests: #{failures + passes}']"
