@@ -1,34 +1,47 @@
 #!/usr/bin/env ruby
+
+def only_dots?(string_in)
+  string_in.strip.each_char.all?{|c| c == '.'}
+end
+
 failures = 0
 passes = 0
 results = false
-def only_dots?(string_in)
-  string_in.each_char do |c|
-    if c == "." or c == " "
-      #dots = true
-    else
-      return false
-    end
-  end
-  return true
-end
+tests = false
+stacktrace = []
 
 while stdin = gets
   puts "#{stdin}"
+  stdin = stdin.gsub(/\[\w+\]/, "").strip
+
   STDOUT.flush
-  if stdin.include?("Test results")
-          results = true
+  if stdin.start_with?("Test results")
+    results = true
   end
-  if results == false
-    if stdin.include?("Failure in")
-      test = stdin.gsub("[exec] Failure in ", "").strip
+
+  unless tests
+    tests = stdin.start_with?("test:")
+  end
+
+  if !results and tests
+
+    if stdin.start_with?("Failure in") or stdin.start_with?("Error in")
+      test = stdin.gsub("Failure in ", "").gsub("Error in ", "").strip
       failures += 1
       puts "##teamcity[testStarted name=\'#{test}\']"
       puts "##teamcity[buildStatus text='Tests Failed: #{failures}, passed: #{passes}, Android tests: #{failures + passes}']"
-      puts "##teamcity[testFailed name=\'#{test}\']"
-      puts "##teamcity[testFinished name=\'#{test}\']"
       STDOUT.flush
     end
+    
+    if stdin.start_with?("at ")
+      stacktrace << stdin
+    elsif stacktrace.count > 0
+      puts "##teamcity[testFailed name=\'#{test}\' details=\'#{stacktrace.join('|n')}\']"
+      puts "##teamcity[testFinished name=\'#{test}\']"
+
+      stacktrace = []
+    end
+
     if stdin.include?(":.")
       colons = stdin.split(":")
       periods = colons[1].count(".")
@@ -46,7 +59,7 @@ while stdin = gets
       puts "##teamcity[buildStatus status='FAILURE']"
       STDOUT.flush
     end
-    if stdin.include?("[exec] error: device not found")
+    if stdin.start_with?("error: device not found")
       puts "##teamcity[buildStatus status='FAILURE' text='Emulator Error']"
       STDOUT.flush
     end
